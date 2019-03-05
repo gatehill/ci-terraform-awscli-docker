@@ -1,6 +1,8 @@
 FROM openjdk:8-jdk
 
-ENV TERRAFORM_VER="0.11.7"
+ARG AWSCLI_VER="1.16.118"
+ARG COMPOSE_VER="1.23.2"
+ARG TERRAFORM_VER="0.11.7"
 
 # Set up directories
 RUN mkdir -p ~/.local/bin
@@ -22,12 +24,12 @@ RUN apt-get update -y && \
     apt-get install -y docker-ce-cli
 
 # Install Docker Compose
-RUN curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
+RUN curl -L "https://github.com/docker/compose/releases/download/${COMPOSE_VER}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose
 
 # Install AWS CLI
 RUN apt-get install -y python-pip && \
-    pip install awscli --upgrade --user
+    pip install awscli==${AWSCLI_VER} --upgrade --user
 
 # Install Terraform
 RUN mkdir -p ~/.local/bin && \
